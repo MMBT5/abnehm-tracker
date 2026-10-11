@@ -1,0 +1,15 @@
+services:
+  tracker:
+    build: .
+    container_name: abnehm-tracker
+    # gleicher Host-User wie beim Besitzer des Datenordners (siehe README)
+    user: "${PUID:-1000}:${PGID:-1000}"
+    restart: unless-stopped
+    ports:
+      # BIND_IP auf die LAN-/VPN-Adresse des Servers setzen, nie ins Internet freigeben
+      - "${BIND_IP:-127.0.0.1}:${PORT:-8099}:8099"
+    volumes:
+      - "${DATA_DIR:-./data}:/data"
+    environment:
+      - START_DATE=${START_DATE:-2026-09-28}
+      - TZ=Europe/Berlin

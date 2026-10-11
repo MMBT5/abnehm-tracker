@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block inhalt %}
+{% if verlauf %}
+<h1>Gewichtsverlauf</h1>
+<div class="card">{{ verlauf }}
+  <small><span style="color:#8b93a1">●</span> Tageswerte &nbsp; <span style="color:#2ecc71">●</span> Wochen-Ø</small>
+</div>
+{% endif %}
+<h1>Wochen</h1>
+<div class="card tabelle">
+  {% if zeilen %}
+  <table>
+    <thead>
+      <tr>
+        <th>Woche</th><th>Ø kg</th><th>Wieg.</th><th>Δ kg</th><th>Ø kcal</th><th>Tage</th>
+        <th>Ø Prot.</th><th>Bauch</th><th>Δ cm</th><th>TDEE</th><th>TDEE Ø</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for z in zeilen %}
+      <tr>
+        <td>{{ z.woche }} <small>{{ z.von | kurz }}</small></td>
+        <td>{{ z.gewicht_avg | de(2) }}</td>
+        <td>{{ z.n_wiegungen }}</td>
+        <td>{{ z.gewicht_diff | de(2, true) }}</td>
+        <td>{{ z.kcal_avg | de(0) }}</td>
+        <td>{{ z.n_kcal }}</td>
+        <td>{{ z.protein_avg | de(0) }}</td>
+        <td>{{ z.bauch | de(1) }}</td>
+        <td>{{ z.bauch_diff | de(1, true) }}</td>
+        <td>{{ z.tdee | de(0) }}</td>
+        <td>{{ z.tdee_gleitend | de(0) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p><small>Wieg. = Anzahl Wiegungen, Tage = Tage mit Kalorien. TDEE erst ab Woche 3 mit mind. 4 Wiegungen in beiden Wochen.</small></p>
+  {% else %}
+  <p class="muted">Noch keine Daten.</p>
+  {% endif %}
+</div>
+{% endblock %}

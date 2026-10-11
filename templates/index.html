@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block inhalt %}
+{% if meldung %}<div class="meldung">{{ meldung }}</div>{% endif %}
+{% if excel_fehler %}<div class="meldung fehler">Excel konnte nicht geschrieben werden (vermutlich in Excel geöffnet). Der Eintrag ist gespeichert, Excel wird beim nächsten Speichern aktualisiert.</div>{% endif %}
+{% for f in fehler %}<div class="meldung fehler">{{ f }}</div>{% endfor %}
+
+<form method="post" action="{{ url_for('speichern') }}" class="card">
+  <label for="datum">Datum <span class="muted">· Tag {{ tag }}, Woche {{ woche }}</span></label>
+  <input type="date" id="datum" name="datum" value="{{ datum }}" max="{{ tage[0].iso }}"
+         onchange="location.href='{{ url_for('index') }}?datum='+this.value">
+
+  <div class="grid">
+    <div>
+      <label for="gewicht">Gewicht (kg)</label>
+      <input id="gewicht" name="gewicht" inputmode="decimal" autocomplete="off"
+             value="{{ werte.gewicht }}">
+    </div>
+    <div>
+      <label for="kcal">Kalorien</label>
+      <input id="kcal" name="kcal" inputmode="numeric" autocomplete="off" value="{{ werte.kcal }}">
+    </div>
+    <div>
+      <label for="protein">Protein (g)</label>
+      <input id="protein" name="protein" inputmode="numeric" autocomplete="off" value="{{ werte.protein }}">
+    </div>
+    <div>
+      <label for="bauch">Bauch (cm)</label>
+      <input id="bauch" name="bauch" inputmode="decimal" autocomplete="off"
+             value="{{ werte.bauch }}">
+    </div>
+  </div>
+  <button class="voll" type="submit">Speichern</button>
+  <small>Leere Felder lassen vorhandene Werte unverändert.</small>
+</form>
+
+{% if gespeichert %}
+<div class="loeschen">
+  {% for feld, name in anzeige.items() if gespeichert[feld] is not none %}
+  <form method="post" action="{{ url_for('loeschen') }}" onsubmit="return confirm('{{ name }} vom {{ datum | kurz }} löschen?')">
+    <input type="hidden" name="datum" value="{{ datum }}">
+    <input type="hidden" name="feld" value="{{ feld }}">
+    <button class="klein" type="submit">{{ name }} löschen</button>
+  </form>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h1>Letzte 14 Tage</h1>
+<div class="card">
+  <ul class="tage">
+    {% for t in tage %}
+    {% set e = t.eintrag %}
+    <li><a href="{{ url_for('index', datum=t.iso) }}">
+      <span class="datum">{{ t.datum | kurz }}</span>
+      {% if e %}
+      <span class="werte">
+        {% if e.gewicht is not none %}<span>{{ e.gewicht | de(1) }} kg</span>{% endif %}
+        {% if e.kcal is not none %}<span>{{ e.kcal }} kcal</span>{% endif %}
+        {% if e.protein is not none %}<span>{{ e.protein }} g P</span>{% endif %}
+        {% if e.bauch is not none %}<span>{{ e.bauch | de(1) }} cm</span>{% endif %}
+      </span>
+      {% else %}<span class="leer">–</span>{% endif %}
+    </a></li>
+    {% endfor %}
+  </ul>
+</div>
+<form method="post" action="{{ url_for('excel_neu') }}">
+  <button class="klein" type="submit">Excel jetzt neu erzeugen</button>
+</form>
+{% endblock %}

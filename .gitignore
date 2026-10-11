@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Persönliche Daten -- NICHT committen
+data/
+*.db
+*.xlsx
+fotos/
+# Einmalig für den ersten Start / enthält Eigendaten
+import_alt*.py
+uebergabe-*.md
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+
+# Deploy-Konfiguration
+.env

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abnehm-Tracker</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="icon" href="{{ url_for('static', filename='icon-192.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}">
+  <meta name="theme-color" content="#181c24">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main>
+  <nav>
+    <a href="{{ url_for('index') }}" class="{{ 'aktiv' if request.endpoint == 'index' }}">Eintragen</a>
+    <a href="{{ url_for('wochen') }}" class="{{ 'aktiv' if request.endpoint == 'wochen' }}">Wochen</a>
+  </nav>
+  {% block inhalt %}{% endblock %}
+</main>
+</body>
+</html>

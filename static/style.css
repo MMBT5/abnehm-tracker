@@ -1,0 +1,30 @@
+:root { --bg:#181c24; --card:#232833; --text:#e8eaed; --muted:#8b93a1; --accent:#2ecc71; --err:#e74c3c; }
+* { box-sizing: border-box; }
+body { margin:0; font:17px/1.4 system-ui, sans-serif; background:var(--bg); color:var(--text); }
+main { max-width:640px; margin:0 auto; padding:12px 14px 40px; }
+nav { display:flex; gap:8px; margin-bottom:12px; }
+nav a { flex:1; text-align:center; padding:10px; border-radius:10px; background:var(--card); color:var(--muted); text-decoration:none; }
+nav a.aktiv { color:var(--text); border-bottom:3px solid var(--accent); }
+h1 { font-size:1.2rem; margin:8px 0; }
+.card { background:var(--card); border-radius:12px; padding:14px; margin-bottom:14px; }
+label { display:block; font-size:.85rem; color:var(--muted); margin-top:10px; }
+input { width:100%; font-size:1.4rem; padding:10px 12px; border-radius:10px; border:1px solid #3a4150; background:var(--bg); color:var(--text); }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+button { font-size:1.1rem; padding:12px 16px; border-radius:10px; border:0; background:var(--accent); color:#04210f; font-weight:600; }
+button.voll { width:100%; margin-top:16px; }
+button.klein { font-size:.8rem; padding:6px 10px; background:#3a4150; color:var(--text); font-weight:400; }
+.meldung { padding:10px 12px; border-radius:10px; margin-bottom:12px; background:#1e3a2a; }
+.meldung.fehler { background:#4a2222; }
+.loeschen { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.loeschen form { margin:0; }
+ul.tage { list-style:none; padding:0; margin:0; }
+ul.tage li a { display:grid; grid-template-columns:3.4rem 1fr; gap:8px; padding:9px 0; border-bottom:1px solid #313846; color:var(--text); text-decoration:none; }
+ul.tage .datum { color:var(--muted); }
+ul.tage .werte span { margin-right:12px; white-space:nowrap; }
+ul.tage .leer { color:var(--muted); }
+.tabelle { overflow-x:auto; }
+table { border-collapse:collapse; width:100%; font-size:.95rem; }
+th, td { padding:7px 8px; text-align:right; white-space:nowrap; border-bottom:1px solid #313846; }
+th:first-child, td:first-child { text-align:left; position:sticky; left:0; background:var(--card); }
+th { color:var(--muted); font-weight:500; }
+small, .muted { color:var(--muted); }

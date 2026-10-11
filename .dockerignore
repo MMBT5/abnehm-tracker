@@ -1,0 +1,9 @@
+.git
+data/
+*.db
+*.xlsx
+tests/
+__pycache__/
+.env
+import_alt*.py
+uebergabe-*.md
