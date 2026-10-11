@@ -45,6 +45,30 @@
 </div>
 {% endif %}
 
+<h1>Fotos <small>(ca. 1× pro Woche)</small></h1>
+<div class="card">
+  <form method="post" action="{{ url_for('foto_hochladen') }}" enctype="multipart/form-data">
+    <input type="hidden" name="datum" value="{{ datum }}">
+    {% for art, name in foto_arten.items() %}
+    <label for="foto-{{ art }}">{{ name }} {% if art in fotos %}<span class="muted">· vorhanden, wird ersetzt</span>{% endif %}</label>
+    <input type="file" id="foto-{{ art }}" name="{{ art }}" accept="image/*" class="datei">
+    {% endfor %}
+    <button class="voll" type="submit">Fotos hochladen</button>
+    <small>Wird verkleinert, Standortdaten (EXIF/GPS) werden entfernt.</small>
+  </form>
+  {% if fotos %}
+  <div class="vorschau">
+    {% for art, datei in fotos.items() %}
+    <form method="post" action="{{ url_for('foto_loeschen') }}" onsubmit="return confirm('Foto löschen?')">
+      <img src="{{ url_for('foto', name=datei) }}" alt="{{ foto_arten[art] }}" loading="lazy">
+      <input type="hidden" name="datum" value="{{ datum }}"><input type="hidden" name="art" value="{{ art }}">
+      <button class="klein" type="submit">{{ foto_arten[art] }} löschen</button>
+    </form>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
 <h1>Letzte 14 Tage</h1>
 <div class="card">
   <ul class="tage">

@@ -28,3 +28,15 @@ th, td { padding:7px 8px; text-align:right; white-space:nowrap; border-bottom:1p
 th:first-child, td:first-child { text-align:left; position:sticky; left:0; background:var(--card); }
 th { color:var(--muted); font-weight:500; }
 small, .muted { color:var(--muted); }
+/* Mobile Browser geben Datumsfeldern eine feste Mindestbreite -> sonst ragt es aus der Karte */
+input[type=date] { display:block; min-width:0; max-width:100%; -webkit-appearance:none; appearance:none; min-height:3.2rem; text-align:left; }
+input.datei { font-size:1rem; padding:10px; }
+.vorschau { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+.vorschau form { margin:0; text-align:center; }
+.vorschau img, .paar img { width:100%; height:auto; border-radius:8px; display:block; margin-bottom:6px; }
+.paar { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; }
+.paar figure { margin:0; }
+.paar figcaption { text-align:center; font-size:.85rem; color:var(--muted); }
+.leerfoto { aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; border:1px dashed #3a4150; border-radius:8px; color:var(--muted); margin-bottom:6px; }
+.vergleichswahl { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+select { width:100%; font-size:1.05rem; padding:10px; border-radius:10px; border:1px solid #3a4150; background:var(--bg); color:var(--text); }

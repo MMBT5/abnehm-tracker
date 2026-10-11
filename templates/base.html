@@ -15,6 +15,7 @@
   <nav>
     <a href="{{ url_for('index') }}" class="{{ 'aktiv' if request.endpoint == 'index' }}">Eintragen</a>
     <a href="{{ url_for('wochen') }}" class="{{ 'aktiv' if request.endpoint == 'wochen' }}">Wochen</a>
+    <a href="{{ url_for('vergleich') }}" class="{{ 'aktiv' if request.endpoint == 'vergleich' }}">Fotos</a>
   </nav>
   {% block inhalt %}{% endblock %}
 </main>

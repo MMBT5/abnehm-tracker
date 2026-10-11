@@ -18,7 +18,7 @@ Konfiguration über Umgebungsvariablen (Defaults in `config.py`):
 |---|---|---|
 | `DB_PATH` | SQLite-Datei | `data/tracker.db` |
 | `XLSX_PATH` | Excel-Ausgabe | `data/tracker.xlsx` |
-| `PHOTO_DIR` | Fotos (spätere Phase) | `data/fotos` |
+| `PHOTO_DIR` | Wochenfotos | `data/fotos` |
 | `START_DATE` | Tag 1, muss ein Montag sein (Wochen laufen Mo–So) | `2026-09-28` |
 
 ## Deployment (Docker)

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block inhalt %}
+<h1>Fotovergleich</h1>
+{% if verfuegbar %}
+<form method="get" class="card vergleichswahl">
+  {% for name, aktuell in (("a", links), ("b", rechts)) %}
+  <select name="{{ name }}" onchange="this.form.submit()">
+    {% for w in verfuegbar %}
+    <option value="{{ w }}" {{ 'selected' if w == aktuell }}>Woche {{ w }} ({{ wochen_von[w] | kurz }})</option>
+    {% endfor %}
+  </select>
+  {% endfor %}
+</form>
+
+{% for art, titel in foto_arten.items() %}
+<div class="card">
+  <small>{{ titel }}</small>
+  <div class="paar">
+    {% for woche in (links, rechts) %}
+    {% set f = nach_woche[woche].get(art) %}
+    <figure>
+      {% if f %}
+      <img src="{{ url_for('foto', name=f[1]) }}" alt="{{ titel }} Woche {{ woche }}" loading="lazy">
+      <figcaption>Woche {{ woche }} · {{ f[0] | kurz }}</figcaption>
+      {% else %}
+      <div class="leerfoto">kein Foto</div>
+      <figcaption>Woche {{ woche }}</figcaption>
+      {% endif %}
+    </figure>
+    {% endfor %}
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card muted">Noch keine Fotos. Du kannst sie auf der Seite „Eintragen" hochladen.</div>
+{% endif %}
+{% endblock %}

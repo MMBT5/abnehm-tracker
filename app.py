@@ -2,15 +2,18 @@
 import os
 from datetime import date, timedelta
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import (Flask, abort, redirect, render_template, request,
+                   send_from_directory, url_for)
 
 import auswertung
 import chart
 import config
 import db
 import excel_export
+import photos
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 30 * 1024 * 1024  # Handyfotos können groß sein
 db.init_db()  # idempotent (CREATE TABLE IF NOT EXISTS)
 excel_export.exportieren()  # Datei beim Start auf Stand bringen
 
@@ -99,6 +102,7 @@ def seite(datum, werte=None, meldung=None, fehler=None):
     werte = {f: "" if werte.get(f) is None else werte.get(f) for f in db.FELDER}
     return render_template(
         "index.html", datum=datum.isoformat(), werte=werte, gespeichert=gespeichert,
+        fotos=photos.tag_fotos(datum.isoformat()), foto_arten=photos.ARTEN,
         tage=letzte_tage(), meldung=meldung, excel_fehler=excel_export.letzter_fehler, fehler=fehler or [], anzeige=ANZEIGE,
         tag=auswertung.tag_nr(datum, config.START_DATE),
         woche=auswertung.wochen_nr(datum, config.START_DATE))
@@ -111,6 +115,8 @@ def index():
     except ValueError:
         datum = date.today()
     meldung = "Gespeichert." if request.args.get("ok") else None
+    if request.args.get("foto"):
+        meldung = "Foto gespeichert."
     if request.args.get("excel") == "ok":
         meldung = "Excel wurde neu erzeugt."
     return seite(datum, meldung=meldung)
@@ -137,6 +143,62 @@ def loeschen():
     db.wert_loeschen(request.form["datum"], feld)
     excel_export.exportieren()
     return redirect(url_for("index", datum=request.form["datum"]))
+
+
+@app.post("/foto")
+def foto_hochladen():
+    try:
+        datum = date.fromisoformat(request.form.get("datum", ""))
+    except ValueError:
+        return seite(date.today(), fehler=["Ungültiges Datum."]), 400
+    if datum > date.today():
+        return seite(date.today(), fehler=["Das Datum liegt in der Zukunft."]), 400
+    gespeichert = 0
+    try:
+        for art in photos.ARTEN:
+            datei = request.files.get(art)
+            if datei and datei.filename:
+                photos.speichern(datum.isoformat(), art, datei.stream)
+                gespeichert += 1
+    except photos.FotoFehler as fehler:
+        return seite(datum, fehler=[str(fehler)]), 400
+    if not gespeichert:
+        return seite(datum, fehler=["Kein Foto ausgewählt."]), 400
+    return redirect(url_for("index", datum=datum.isoformat(), foto=1))
+
+
+@app.post("/foto/loeschen")
+def foto_loeschen():
+    photos.loeschen(request.form.get("datum", ""), request.form.get("art", ""))
+    return redirect(url_for("index", datum=request.form.get("datum", "")))
+
+
+@app.get("/foto/<name>")
+def foto(name):
+    if not photos.DATEI_MUSTER.match(name):  # nur eigene Dateinamen, keine Pfadtricks
+        abort(404)
+    return send_from_directory(config.PHOTO_DIR, name, max_age=3600)
+
+
+@app.get("/vergleich")
+def vergleich():
+    nach_woche = photos.nach_wochen()
+    verfuegbar = sorted(nach_woche)
+
+    def wahl(name, standard):
+        try:
+            w = int(request.args.get(name, ""))
+        except ValueError:
+            return standard
+        return w if w in nach_woche else standard
+
+    # Standard: älteste gegen neueste Woche mit Foto
+    links = wahl("a", verfuegbar[0] if verfuegbar else None)
+    rechts = wahl("b", verfuegbar[-1] if verfuegbar else None)
+    return render_template(
+        "vergleich.html", verfuegbar=verfuegbar, links=links, rechts=rechts,
+        nach_woche=nach_woche, foto_arten=photos.ARTEN,
+        wochen_von={w: auswertung.woche_von_bis(w, config.START_DATE)[0] for w in verfuegbar})
 
 
 @app.post("/excel")
