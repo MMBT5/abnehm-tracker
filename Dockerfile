@@ -14,7 +14,8 @@ ENV DB_PATH=/data/tracker.db \
     XLSX_PATH=/data/tracker.xlsx \
     PHOTO_DIR=/data/fotos \
     TZ=Europe/Berlin \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    HOME=/tmp
 
 EXPOSE 8099
 
