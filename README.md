@@ -4,6 +4,8 @@ Kleine Web-App fürs Handy: tägliche Werte (Gewicht, Kalorien, Protein, Bauchum
 Die Daten liegen in SQLite, daraus wird nach jedem Speichern automatisch eine Excel-Datei erzeugt.
 Flask, `sqlite3` (ohne ORM), openpyxl. Keine Cloud, kein Tracking.
 
+![alt text]({375DF5D4-854B-493A-8BA1-3E18A5737625}.png)
+
 ## Lokal starten
 
 ```
