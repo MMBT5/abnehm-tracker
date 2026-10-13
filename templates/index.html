@@ -78,10 +78,10 @@
       <span class="datum">{{ t.datum | kurz }}</span>
       {% if e %}
       <span class="werte">
-        {% if e.gewicht is not none %}<span>{{ e.gewicht | de(1) }} kg</span>{% endif %}
-        {% if e.kcal is not none %}<span>{{ e.kcal }} kcal</span>{% endif %}
-        {% if e.protein is not none %}<span>{{ e.protein }} g P</span>{% endif %}
-        {% if e.bauch is not none %}<span>{{ e.bauch | de(1) }} cm</span>{% endif %}
+        <span>{% if e.gewicht is not none %}{{ e.gewicht | de(1) }} kg{% else %}–{% endif %}</span>
+        <span>{% if e.kcal is not none %}{{ e.kcal }} kcal{% else %}–{% endif %}</span>
+        <span>{% if e.protein is not none %}{{ e.protein }} g P{% else %}–{% endif %}</span>
+        <span>{% if e.bauch is not none %}{{ e.bauch | de(1) }} cm{% else %}–{% endif %}</span>
       </span>
       {% else %}<span class="leer">–</span>{% endif %}
     </a></li>

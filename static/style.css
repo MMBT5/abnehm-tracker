@@ -20,7 +20,8 @@ button.klein { font-size:.8rem; padding:6px 10px; background:#3a4150; color:var(
 ul.tage { list-style:none; padding:0; margin:0; }
 ul.tage li a { display:grid; grid-template-columns:3.4rem 1fr; gap:8px; padding:9px 0; border-bottom:1px solid #313846; color:var(--text); text-decoration:none; }
 ul.tage .datum { color:var(--muted); }
-ul.tage .werte span { margin-right:12px; white-space:nowrap; }
+ul.tage .werte { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; }
+ul.tage .werte span { text-align:right; white-space:nowrap; }
 ul.tage .leer { color:var(--muted); }
 .tabelle { overflow-x:auto; }
 table { border-collapse:collapse; width:100%; font-size:.95rem; }
